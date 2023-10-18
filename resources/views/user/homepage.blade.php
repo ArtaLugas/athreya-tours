@@ -89,26 +89,49 @@
             object-fit: cover; /* Gambar mengisi kontainer tanpa mengubah rasio aspek */
         }
 
-        .package-list-section {
-            background-color: #1d1c1c; /* Ganti dengan warna gelap yang Anda inginkan */
-            padding: 50px; /* Atur padding sesuai kebutuhan */
+        /* Gaya untuk judul "Paket Wisata" */
+        .judul-paket-wisata {
+            color: #000; /* Warna teks untuk judul paket wisata (misalnya, hitam) */
+            font-size: 24px; /* Ukuran font sesuaikan dengan preferensi Anda */
+            font-weight: bold; /* Gaya huruf tebal jika diperlukan */
+            margin-bottom: 20px;     /* Sesuaikan spasi antara judul dan kartu */
+        }
+
+        /* Gaya untuk judul "Biro Wisata Athreya Tour" dengan warna orange */
+        .judul-biro-wisata {
+            color: #ff6600; /* Warna teks untuk judul biro wisata Athreya Tour (misalnya, orange) */
+            font-size: 24px; /* Ukuran font sesuaikan dengan preferensi Anda */
+            font-weight: bold; /* Gaya huruf tebal jika diperlukan */
+            margin-bottom: 20px; /* Sesuaikan spasi antara judul dan kartu */
         }
 
 
+        .package-list-section {
+            padding: 80px 0;
+            background-color: #f9f9f9;
+        }
+
         .package-card {
-            border: 1px solid #ddd;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            transition: transform 0.3s;
+            margin: 20px;
+            position: relative;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .package-card:hover {
+            transform: scale(1.03);
         }
 
         .package-card img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
+            width: 100%;
+            max-height: 200px;
             object-fit: cover;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
 
         .package-details {
@@ -117,33 +140,59 @@
 
         .package-details h3 {
             font-size: 24px;
-            margin-bottom: 10px;
+            margin: 0;
+            color: #333;
         }
 
         .package-details p {
-            font-size: 16px;
-            margin: 10px 0;
+            color: #888;
+            margin: 5px 0;
         }
 
-        .package-details i {
-            margin-right: 10px;
+        .package-details .fas {
+            color: #f39c12;
+            margin-right: 5px;
         }
 
-        /* Hover effect for the card */
-        .package-card:hover {
-            transform: scale(1.03);
-            transition: transform 0.2s ease;
+        .btn-primary {
+            background-color: #f39c12;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background-color 0.3s;
         }
 
+        .btn-primary:hover {
+            background-color: #e68a0d;
+        }
 
+        /* Gaya untuk tombol Lihat Semua Paket dengan kelas lihat-semua-paket */
+        .btn.lihat-semua-paket {
+            background-color: #ff6600; /* Warna latar belakang */
+            color: #fff; /* Warna teks */
+            border: none;
+            padding: 10px 20px; /* Sesuaikan dengan ukuran yang diinginkan */
+            border-radius: 5px; /* Gaya sudut tombol */
+            text-decoration: none; /* Hilangkan garis bawah pada tautan */
+            font-weight: bold; /* Gaya huruf tebal */
+            transition: background-color 0.3s ease; /* Transisi saat mengarahkan kursor */
+        }
 
+        /* Gaya saat mengarahkan kursor ke tombol */
+        .btn.lihat-semua-paket:hover {
+            background-color: #ff4400; /* Warna latar belakang saat mengarahkan kursor */
+        }
     </style>
     <section class="hero-section">
         <div class="hero-content">
             <div class="left-content">
             <h1>Selamat Datang di Athreya Tours</h1>
             <p>Menyediakan Pengalaman Wisata Terbaik</p>
-            <a href="#" class="btn btn-primary">Jelajahi</a>
+            <a href="{{ route('paketwisata') }}" class="btn btn-primary">Jelajahi</a>
             </div>
             <div class="right-content">
             <img src="{{ asset('user/assets/images/travel_ullu.png') }}" alt="Ilustrasi Perusahaan" />
@@ -156,7 +205,11 @@
                 <div class="col-lg-6">
                     <div class="h5 text-success">Tentang Kami</div>
                     <h2 class="h2 fw-bold mb-3">Biro Tour Athreya</h2>
-                    <p>{{ $aboutUsData->content }}</p>
+                    @if ($aboutUsData && isset($aboutUsData->content))
+                        <p>{{ $aboutUsData->content }}</p>
+                    @else
+                        <p>Data About Us tidak tersedia.</p>
+                    @endif
                 </div>
                 <div class="col-lg-6">
                     <img src="{{ asset('user/assets/images/about-img.png') }}" style="width:100%; height:auto; max-height:500px; object-fit:cover;" alt="Tentang Kami">
@@ -167,6 +220,10 @@
     <section class="package-list-section wf100 p80 bg-light">
         <div class="container">
             <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h4 class="judul-biro-wisata">Biro Wisata Athreya Tour</h4>
+                    <h2 class="judul-paket-wisata">Paket Wisata</h2>
+                </div>
                 @foreach($paketWisata as $paket)
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="package-card">
@@ -178,11 +235,15 @@
                         <div class="package-details">
                             <h3>{{ $paket->nama_paket }}</h3>
                             <p><i class="fas fa-map-marker-alt"></i> {{ $paket->lokasi_wisata }}</p>
-                            <p><i class="fas fa-dollar-sign"></i> {{ $paket->harga }}</p>
+                            <p><i class="fas fa-dollar-sign"></i>Rp {{  number_format($paket->harga, 0, ',' , '.')  }}</p>
+                            <a href="{{ route('detailpaketwisata', $paket->id) }}" class="btn btn-primary">Lihat Detail</a>
                         </div>
                     </div>
                 </div>
                 @endforeach
+                <div class="col-lg-12 text-center">
+                    <a href="" class="btn btn-primary lihat-semua-paket">Lihat Semua Paket Wisata</a>
+                </div>
             </div>
         </div>
     </section>

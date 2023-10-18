@@ -55,8 +55,9 @@ class PaketWisataController extends Controller
 
     public function EditPaketWisata($id)
     {
+        $user = Auth::user();
         $paket = PaketWisata::findOrFail($id);
-        return view('admin.editpaketwisata', compact('paket'));
+        return view('admin.editpaketwisata', compact('user','paket'));
     }
 
     public function UpdatePaketWisata(Request $request, $id)

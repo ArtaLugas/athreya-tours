@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +12,8 @@ class UserProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('user.profil', compact('user'));
+        $pesanan = Pesanan::where('user_id', auth()->user()->id)->get();
+        return view('user.profil', compact('user', 'pesanan'));
     }
 
     public function UpdateProfilUser(Request $request, $id)

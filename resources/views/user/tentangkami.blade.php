@@ -47,7 +47,7 @@
             padding: 20px 0;
         }
     </style>
-    <section class="pt-3">
+    <section class="p-5">
         <header class="header">
         <div class="header-content">
             <h1>About Us</h1>

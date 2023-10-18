@@ -33,6 +33,10 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('user/assets/css/vendors/slick/slick.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('user/assets/css/vendors/slick/slick-theme.css') }}">
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('user/assets/css/demo4.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <style>
         .h-logo {
             max-width: 185px !important;
@@ -49,7 +53,7 @@
         }
     </style>
     <link rel="stylesheet" href="{{ asset('user/assets/css/custom.css') }}">
-    @stack('styles')
+    @stack('css')
 
 </head>
 
@@ -158,6 +162,70 @@
             color: #00bcd4;
         }
 
+        /* Gaya latar belakang transparan */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Gaya modal */
+        .modal {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Gaya header modal */
+        .modal-header {
+            background-color: #007BFF;
+            color: #fff;
+            border-bottom: 1px solid #007BFF;
+            border-radius: 5px 5px 0 0;
+            padding: 10px;
+        }
+
+        /* Gaya judul modal */
+        .modal-title {
+            font-weight: 600;
+        }
+
+        /* Gaya body modal */
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Gaya daftar dalam modal */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* Gaya footer modal */
+        .modal-footer {
+            background-color: #f7f7f7;
+            border-top: 1px solid #ccc;
+            border-radius: 0 0 5px 5px;
+            padding: 10px;
+        }
+
+        /* Gaya tombol tutup modal */
+        .close {
+            color: #007BFF;
+            font-size: 20px;
+        }
+
+        /* Gaya tombol tutup modal saat dihover */
+        .close:hover {
+            color: #0056b3;
+        }
+
 
         @media (max-width:600px) {
             .h-logo {
@@ -213,9 +281,8 @@
                                                     </span>
                                                 </div>
                                             </li>
-                                            <li><a href="index.htm" class="nav-link menu-title">Home</a></li>
-                                            <li><a href="shop.html" class="nav-link menu-title">Shop</a></li>
-                                            <li><a href="cart/list.html" class="nav-link menu-title">Cart</a></li>
+                                            <li><a href="{{ route('homepage') }}" class="nav-link menu-title">Home</a></li>
+                                            <li><a href="{{ route('paketwisata') }}" class="nav-link menu-title">Package Tour</a></li>
                                             <li><a href="{{ route('aboutususer') }}" class="nav-link menu-title">About Us</a></li>
                                             <li><a href="{{ route('kontakkami') }}" class="nav-link menu-title">Contact Us</a>
                                             </li>
@@ -248,7 +315,10 @@
                                                         @else
                                                             <li>
                                                                 <a href="{{ route('profiluser')}}" class="d-block">Profilku</a>
-                                                            </li>        
+                                                            </li>
+                                                            <li>
+                                                                <a href="{{ route('riwayatpesanan') }}" class="d-block">Riwayat Psanan</a>
+                                                            </li>      
                                                         @endif
                                                         <li>
                                                             <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('frmlogout').submit();" class="d-block">Log Out</a>
@@ -336,7 +406,11 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-section about">
                         <h4>About Us</h4>
-                        <p class="mt-3">{{ $aboutUsData->content }}</p>
+                        @if ($aboutUsData && isset($aboutUsData->content))
+                            <p class="mt-3">{{ $aboutUsData->content }}</p>
+                        @else
+                            <p class="mt-3">Data About Us tidak tersedia.</p>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
@@ -356,7 +430,7 @@
                             <li><a href="{{ route('homepage') }}">Home</a></li>
                         </ul>
                         <ul>
-                            <li><a href="#">Services</a></li>
+                            <li><a href="{{ route('paketwisata') }}">Package Tour</a></li>
                         </ul>
                         <ul>
                             <li><a href="{{ route('aboutususer') }}">About Us</a></li>
@@ -375,6 +449,7 @@
         </a>
     </div>
     <div class="bg-overlay"></div>
+
     <script src="{{ asset('user/assets/js/jquery-3.5.1.min.js') }}"></script>
     <script src="{{ asset('user/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('user/assets/js/feather/feather.min.js') }}"></script>
@@ -395,7 +470,7 @@
             $('[data-bs-toggle="tooltip"]').tooltip()
         });
     </script>
-    @stack('scripts')
+    @stack('script')
 </body>
 
 </html>

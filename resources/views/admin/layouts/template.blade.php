@@ -116,14 +116,29 @@
                 <div data-i18n="PesanUser">Pesan User</div>
               </a>
             </li>
+            <li class="menu-item">
+              <a href="{{ route('daftarpesananuser') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Pesanan">Pesanan</div>
+              </a>
+            </li>
             <!-- Components -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Pengaturan</span></li>
             <!-- Cards -->
             <li class="menu-item">
-              <a href="cards-basic.html" class="menu-link">
+              <a href="{{ 'lihatprofil' }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Basic">Cards</div>
+                <div data-i18n="Basic">Profil</div>
               </a>
+            </li>
+            <li class="menu-item">
+              <a href="{{ Route('logout') }}" class="menu-link" onclick="event.preventDefault();document.getElementById('frmlogout').submit();">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Basic">Keluar</div>
+              </a>
+              <form action="{{ route('logout') }}" id="frmlogout" method="POST">
+                @csrf
+              </form>
             </li>
           </ul>
         </aside>

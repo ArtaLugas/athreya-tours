@@ -17,4 +17,9 @@ class PaketWisata extends Model
     {
         return self::first();
     }
+
+    public function pesanan()
+    {
+        return $this->hasMany(Pesanan::class, 'paket_wisata_id');
+    }
 }

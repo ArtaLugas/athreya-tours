@@ -1,16 +1,20 @@
 <?php
 
-use App\Http\Controllers\AboutUsController;
-use App\Http\Controllers\AboutUsUserController;
+use App\Models\Pesanan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\PemesananController;
+use App\Http\Controllers\AboutUsUserController;
 use App\Http\Controllers\PaketWisataController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\AdminPesananController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\ContactAdminController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\HomepageController;
-use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\PaketWisataUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,20 +32,27 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/tentang-kami', [AboutUsUserController::class, 'index'])->name('aboutususer');
 
-    Route::get('/kontak-kami', [ContactController::class, 'index'])->name('kontakkami');
-    Route::post('/store-kontak-kami', [ContactController::class, 'StoreKontakKami'])->name('storekontakkami');
+    Route::controller(ContactController::class)->group(function () {
+        Route::get('/kontak-kami', [ContactController::class, 'index'])->name('kontakkami');
+        Route::post('/store-kontak-kami', [ContactController::class, 'StoreKontakKami'])->name('storekontakkami');
+    });
+
+    Route::controller(PaketWisataUserController::class)->group(function () {
+        Route::get('/paket-wisata', [PaketWisataUserController::class, 'index'])->name('paketwisata');
+        Route::post('/paket-wisata/sort', 'SortPaketWisata')->name('sortpaketwisata');
+    });
 });
 
 
+Route::middleware(['auth'])->group(function () {
+    Route::controller(HomepageController::class)->group(function () {
+        Route::get('/dashboard', [HomepageController::class, 'index'])->name('dashboard');
+    });
 
-Route::get('/dashboard', function () {
-    return view('user.homepage');
-})->middleware(['auth'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::controller(PaketWisataUserController::class)->group(function () {
+        Route::get('/paket-wisata/detail/{id}', 'ShowDetail')->name('detailpaketwisata');
+        Route::post('/pemesanan', 'StorePemesanan')->name('storepemesanan');
+    });
 });
 
 require __DIR__ . '/auth.php';
@@ -77,6 +88,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/admin/balas-pesan/{id}', 'KirimBalasPesan')->name('kirimbalaspesan');
         Route::get('/admin/delete/kontak/{id}', 'DeleteKontak')->name('deletekontak');
     });
+
+    Route::controller(AdminPesananController::class)->group(function () {
+        Route::get('/admin/pesanan', 'DaftarPesananUser')->name('daftarpesananuser');
+        Route::post('/admin/pesanan/tolak/{id}', 'TolakPesanan')->name('tolakpesanan');
+        Route::post('/admin/pesanan/terima/{id}', 'TerimaPesanan')->name('terimapesanan');
+        Route::get('/admin/kirim-invoice/{orderId}', 'KirimInvoice')->name('kiriminvoice');
+        Route::get('/admin/pesanan/delete/{id}', 'DeletePesanan')->name('deletepesanan');
+    });
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -84,4 +103,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::get('/athreya-tours/profil', 'index')->name('profiluser');
         Route::post('/athreya-tours/update-profil/{id}', 'UpdateProfilUser')->name('updateprofiluser');
     });
+
+    Route::get('/athreya-tours/riwayat-pesanan/', [HomepageController::class, 'RiwayatPesanan'])->name('riwayatpesanan');
 });
