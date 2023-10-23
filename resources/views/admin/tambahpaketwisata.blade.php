@@ -14,11 +14,9 @@
                     </div>
                     @if ($errors->any())
                         <div class="alert alert-danger">
-                          <ul>
-                            @foreach ($errors as $error)
-                                <li>{{ $error }}</li>
+                            @foreach ($errors->all() as $error)
+                                <p>{{ $error }}</p>
                             @endforeach
-                          </ul>
                         </div>
                     @endif
                     <div class="card-body">
@@ -57,7 +55,7 @@
                         <div class="row mb-3">
                           <label class="col-sm-2 col-form-label" for="foto_wisata">Foto:</label>
                           <div class="col-sm-10">
-                            <input type="file" class="form-control" name="foto_wisata" id="foto_wisata" required>
+                            <input type="file" class="form-control" name="foto_wisata[]" id="foto_wisata" multiple required>
                           </div>
                         </div>
                         <div class="row mb-3">

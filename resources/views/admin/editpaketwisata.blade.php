@@ -3,6 +3,53 @@
     Edit Paket Wisata | Athreya Tours
 @endsection
 @section('content')
+  <style>
+    .slider-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    /* CSS untuk image slider */
+    .image-slider {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    /* CSS untuk gambar dalam slider */
+    .slider-image {
+        max-width: 100%;
+        max-height: 200px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    /* CSS untuk slider controls */
+    .slider-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    /* Gaya untuk tombol "prev" dan "next" */
+    .prev, .next {
+        font-size: 24px;
+        cursor: pointer;
+        margin: 0 10px;
+    }
+
+    /* Gaya saat mouse diarahkan ke tombol "prev" dan "next" */
+    .prev:hover, .next:hover {
+        color: darkorange;
+    }
+  </style>
  <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="py-3 mb-4"><span class="text-muted fw-light">Page/</span> Edit Paket Wisata</h4>
 
@@ -58,14 +105,37 @@
                           </div>
                         </div>
                         <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="foto_wisata">Foto:</label>
+                            <label class="col-sm-2 col-form-label" for="foto_wisata">Foto:</label>
+                            <div class="col-lg-6">
+                                <div class="slider-container">
+                                    @if ($paket->foto_wisata)
+                                    <div class="image-slider">
+                                        <div class="slider-wrapper">
+                                            @foreach (json_decode($paket->foto_wisata) as $image)
+                                            <img src="{{ asset('uploads/paketWisata/' . $image) }}"
+                                                style="max-width: 200px; max-height: 200px;"
+                                                alt="{{ $paket->nama_paket }}" class="slider-image">
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="slider-controls">
+                                        <div class="prev" onclick="plusSlides(-1)">
+                                            <i class='bx bx-chevron-left'></i>
+                                        </div>
+                                        <div class="next" onclick="plusSlides(1)">
+                                            <i class='bx bx-chevron-right'></i>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <span>Tidak ada gambar</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="foto_wisata" class="col-sm-2 col-form-label">Ubah Foto:</label>
                           <div class="col-sm-10">
-                            @if ($paket->foto_wisata)
-                                <img src="{{ asset('uploads/paketWisata/' .$paket->foto_wisata) }}" style="max-width: 100px" alt="{{ $paket->nama_paket }}">
-                            @else
-                            <span>Tidak ada gambar</span>
-                            @endif
-                            <input type="file" class="form-control mt-2" name="foto_wisata" id="foto_wisata">
+                            <input type="file" class="form-control mt-2" name="foto_wisata[]" id="foto_wisata" multiple>
                           </div>
                         </div>
                         <div class="row mb-3">
@@ -91,10 +161,35 @@
                 </div>
               </div>
             </div>
-        </div>
-    </div>
- </div>
  <script>
+  let slideIndex = 0;
+    const slides = document.querySelectorAll(".slider-image"); // Mendefinisikan slides di luar fungsi
+
+    showSlides(slideIndex);
+
+    function showSlides(index) {
+        if (slides.length === 0) return;
+
+        slides.forEach((slide, i) => {
+            if (i === index) {
+                slide.style.display = "block";
+            } else {
+                slide.style.display = "none";
+            }
+        });
+        slideIndex = index;
+    }
+
+    function plusSlides(n) {
+        slideIndex += n;
+        if (slideIndex < 0) {
+            slideIndex = slides.length - 1;
+        }
+        if (slideIndex >= slides.length) {
+            slideIndex = 0;
+        }
+        showSlides(slideIndex);
+    }
     // Fungsi untuk menghitung tanggal berakhir
     function hitungTanggalBerakhir() {
         const tanggalMulai = new Date(document.getElementById('tanggal_mulai').value);

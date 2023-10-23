@@ -13,6 +13,10 @@ class PaketWisata extends Model
         'nama_paket', 'deskripsi', 'harga', 'lokasi_wisata', 'durasi', 'foto_wisata', 'tanggal_mulai', 'tanggal_berakhir'
     ];
 
+    protected $casts = [
+        'foto_wisata' => 'array',
+    ];
+
     public static function getPaketWisata()
     {
         return self::first();

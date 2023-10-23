@@ -5,12 +5,17 @@
 @section('content')
   <style>
     .button-container {
-      display: flex;
-      justify-content: space-between;
+        display: flex;
+        justify-content: space-between;
     }
 
-    .button-container a{
-      margin: 10px;
+    .button-container a {
+        margin: 10px;
+    }
+
+    .disabled {
+        pointer-events: none;
+        opacity: 0.6;
     }
   </style>
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -51,22 +56,30 @@
                             <tr>
                                 <td>{{ $pesan->id }}</td>
                                 <td>{{ $pesan->user->name }}</td>
-                                <td>{{ $pesan->paketWisata->nama_paket }}</td>
+                                @if ($pesan->paketWisata)
+                                    <td>{{ $pesan->paketWisata->nama_paket }}</td>
+                                @else
+                                    <td>Data Paket Wisata Tidak Ditemukan</td>
+                                @endif
                                 <td>{{ $pesan->jumlah_orang }}</td>
                                 <td>Rp {{  number_format($pesan->total_harga, 0, ',' , '.')  }}</td>
                                 <td>{{ $pesan->status_pesanan }}</td>
                                 <td class="button-container">
-                                    @if ($pesan->status_pesanan==='pending')
-                                        <a href="{{ route('tolakpesanan', $pesan->id) }}" class="btn btn-warning" onclick="event.preventDefault();document.getElementById('frmtolak').submit();">Tolak</a>
-                                        <form action="{{ route('tolakpesanan', $pesan->id) }}" method="POST" id="frmtolak">
-                                          @csrf
-                                        </form>
+                                    @if (!$pesan->invoice_sent)
+                                        <a class="btn btn-primary" id="btn-kirim-invoice-{{ $pesan->id }}" href="{{ route('kiriminvoice', ['orderId'=>$pesan->id]) }}" onclick="kirimInvoice({{ $pesan->id }})">Kirim Invoice</a>
+                                        <a class="btn btn-success disabled" id="btn-terima-{{ $pesan->id }}" disabled>Terima</a>
+                                        <a class="btn btn-warning disabled" id="btn-tolak-{{ $pesan->id }}" disabled>Tolak</a>
+                                    @else
+                                        <a class="btn btn-primary disabled" id="btn-kirim-invoice-{{ $pesan->id }}" disabled>Kirim Invoice</a>
                                         <a href="{{ route('terimapesanan', $pesan->id) }}" class="btn btn-success" onclick="event.preventDefault();document.getElementById('frmterima').submit();">Terima</a>
                                         <form action="{{ route('terimapesanan', $pesan->id) }}" method="POST" id="frmterima">
                                           @csrf
                                         </form>
+                                        <a href="{{ route('tolakpesanan', $pesan->id) }}" class="btn btn-warning" onclick="event.preventDefault();document.getElementById('frmtolak').submit();">Tolak</a>
+                                        <form action="{{ route('tolakpesanan', $pesan->id) }}" method="POST" id="frmtolak">
+                                          @csrf
+                                        </form>
                                     @endif
-                                    <a href="{{ route('kiriminvoice', ['orderId' => $pesan->id]) }}" class="btn btn-primary">Kirim Invoice</a>
                                     <a href="{{ route('deletepesanan', $pesan->id) }}" class="btn btn-danger" onclick="event.preventDefault(); if (confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) { document.getElementById('frmhapus-{{ $pesan->id }}').submit(); }">Hapus</a>
                                     <form action="{{ route('deletepesanan', $pesan->id) }}" method="GET" id="frmhapus-{{ $pesan->id }}" style="display: none;">
                                         @csrf
@@ -81,4 +94,19 @@
             </div>
         </div>
     </div>
+    <script>
+      @foreach ($pesanan as $pesan)
+        document.getElementById('btn-kirim-invoice-{{ $pesan->id }}').addEventListener('click', function() {
+            fetch("{{ route('kiriminvoice', ['orderId' => $pesan->id]) }}", {
+                method: 'GET'
+            }).then(function(response) {
+                if (response.ok) {
+                    document.getElementById('btn-kirim-invoice-{{ $pesan->id }}').classList.add('disabled');
+                    document.getElementById('btn-terima-{{ $pesan->id }}').classList.remove('disabled');
+                    document.getElementById('btn-tolak-{{ $pesan->id }}').classList.remove('disabled');
+                }
+            });
+        });
+      @endforeach
+    </script>
 @endsection

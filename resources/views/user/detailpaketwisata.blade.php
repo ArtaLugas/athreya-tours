@@ -8,6 +8,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     @endpush
     <style>
         /* CSS untuk desain halaman detail paket wisata */
@@ -52,6 +53,40 @@
             color:orange;
         }
 
+        .slider-container {
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+
+        .slider-image {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain; /* Ini akan menjaga gambar tetap proporsional dan sesuai dengan container */
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto; /* Tengahkan slider controls */
+            background: rgba(0, 0, 0, 0.7); /* Tambahkan latar belakang transparan */
+        }
+
+        .prev, .next {
+            font-size: 24px;
+            cursor: pointer;
+            color: #fff;
+            margin: 0 10px;
+        }
+
         .package-card p {
             font-family: 'Arial', sans-serif; /* Pilih font yang sesuai */
             font-size: 16px; /* Ukuran font */
@@ -59,7 +94,8 @@
             line-height: 1.4; /* Jarak antar baris */
             text-align: justify; /* Ratakan teks */
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Bayangan teks */
-            margin: 10px 0; /* Ruang antara paragraf */
+            margin-top: 10px;
+            margin-bottom: 10px;
             /* Hiasan tambahan seperti efek hover atau transisi (opsional) */
         }
 
@@ -103,7 +139,7 @@
             margin-top: 20px;
         }
 
-        h4 {
+        .package-detail h4 {
             font-size: 1.25rem;
             margin-top: 20px;
         }
@@ -184,18 +220,38 @@
                                 {{ session('message') }}
                             </div>
                         @endif
-                        <img src="{{ asset('uploads/paketWisata/'.$paketWisata->foto_wisata) }}" alt="{{ $paketWisata->nama_paket }}" class="img-fluid">
-                        <h4>Deskripsi:</h4>
-                        <p>{{ $paketWisata->deskripsi }}</p>
-                        <h4>Lokasi:</h4>
-                        <p>{{ $paketWisata->lokasi_wisata }}</p>
-                        <h4>Harga:</h4>
-                        <p>Rp {{  number_format($paketWisata->harga, 0, ',' , '.')  }}</p>
-                        <h4>Waktu: </h4>
-                        <p>{{ $paketWisata->durasi }} Hari</p>
-                        <h4>Tanggal: </h4>
-                        <p>{{ $paketWisata->tanggal_mulai }} sampai {{ $paketWisata->tanggal_berakhir }}</p>
-                        <button type="button" class="btn btn-custom" data-toggle="modal" data-target="#pesanModal">Pesan</button>
+                        @if ($paketWisata->foto_wisata)
+                            <div class="slider-container">
+                                <div class="slider-wrapper">
+                                    @foreach (json_decode($paketWisata->foto_wisata) as $image)
+                                        <img src="{{ asset('uploads/paketWisata/' . $image) }}" alt="{{ $paketWisata->nama_paket }}" class="slider-image">
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="slider-controls">
+                                <div class="prev" onclick="plusSlides(-1)">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </div>
+                                <div class="next" onclick="plusSlides(1)">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        @else
+                            <span>Tidak ada gambar</span>
+                        @endif
+                        <div class="package-detail">
+                            <h4>Deskripsi:</h4>
+                            <p>{{ $paketWisata->deskripsi }}</p>
+                            <h4>Lokasi:</h4>
+                            <p>{{ $paketWisata->lokasi_wisata }}</p>
+                            <h4>Harga:</h4>
+                            <p>Rp {{ number_format($paketWisata->harga, 0, ',', '.') }}</p>
+                            <h4>Waktu:</h4>
+                            <p>{{ $paketWisata->durasi }} Hari</p>
+                            <h4>Tanggal:</h4>
+                            <p>{{ $paketWisata->tanggal_mulai }} sampai {{ $paketWisata->tanggal_berakhir }}</p>
+                            <button type="button" class="btn btn-custom" data-toggle="modal" data-target="#pesanModal">Pesan</button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -252,12 +308,36 @@
         </div>
     </section>
     <script>
+        let slideIndex = 0;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            slideIndex += n;
+            showSlides(slideIndex);
+        }
+
+        function showSlides(index) {
+            const slides = document.querySelectorAll(".slider-image");
+            if (slides.length === 0) return;
+
+            if (index < 0) {
+                index = slides.length - 1;
+            }
+            if (index >= slides.length) {
+                index = 0;
+            }
+
+            slides.forEach((slide) => {
+                slide.style.transform = `translateX(-${index * 100}%)`;
+            });
+            slideIndex = index;
+        }
         // Efek animasi pada tombol "Pesan"
-        document.querySelector(".btn-primary").addEventListener("mouseenter", function () {
+        document.querySelector(".btn-custom").addEventListener("mouseenter", function () {
             this.style.transform = "scale(1.1)";
         });
 
-        document.querySelector(".btn-primary").addEventListener("mouseleave", function () {
+        document.querySelector(".btn-custom").addEventListener("mouseleave", function () {
             this.style.transform = "scale(1)";
         });
 
@@ -268,9 +348,4 @@
             document.getElementById('total_harga').value = totalHarga;
         });
     </script>
-    @push('script')
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    @endpush
 @endsection

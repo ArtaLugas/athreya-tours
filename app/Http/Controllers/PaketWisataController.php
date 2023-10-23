@@ -30,9 +30,10 @@ class PaketWisataController extends Controller
             'harga' => 'required',
             'lokasi_wisata' => 'required',
             'durasi' => 'required|integer',
-            'foto_wisata' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'tanggal_mulai' => 'required|date',
         ]);
+
+        $fotoWisataPaths = [];
 
         $tanggalMulai = Carbon::parse($validatedData['tanggal_mulai']);
         $durasi = $validatedData['durasi'];
@@ -40,11 +41,14 @@ class PaketWisataController extends Controller
         $tanggalBerakhir = $tanggalMulai->addDays($durasi);
 
         if ($request->hasFile('foto_wisata')) {
-            $image = $request->file('foto_wisata');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/paketWisata/'), $imageName);
-            $validatedData['foto_wisata'] = $imageName;
+            foreach ($request->file('foto_wisata') as $image) {
+                $imageName = time() . rand(1, 99) . '.' . $image->extension();
+                $image->move(public_path('uploads/paketWisata'), $imageName);
+                $fotoWisataPaths[] = $imageName;
+            }
         }
+
+        $validatedData['foto_wisata'] = json_encode($fotoWisataPaths); // Menggunakan JSON untuk menyimpan multiple paths.
 
         $validatedData['tanggal_berakhir'] = $tanggalBerakhir;
 
@@ -53,11 +57,12 @@ class PaketWisataController extends Controller
         return redirect()->route('listpaketwisata')->with('message', 'Paket Wisata Berhasil Ditambahkan');
     }
 
+
     public function EditPaketWisata($id)
     {
         $user = Auth::user();
         $paket = PaketWisata::findOrFail($id);
-        return view('admin.editpaketwisata', compact('user','paket'));
+        return view('admin.editpaketwisata', compact('user', 'paket'));
     }
 
     public function UpdatePaketWisata(Request $request, $id)

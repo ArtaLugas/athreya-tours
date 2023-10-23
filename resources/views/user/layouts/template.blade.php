@@ -426,7 +426,7 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="footer-section links">
                         <h4>Quick Links</h4>
-                        <ul class="mt-3">
+                        <ul class="mt-2">
                             <li><a href="{{ route('homepage') }}">Home</a></li>
                         </ul>
                         <ul>

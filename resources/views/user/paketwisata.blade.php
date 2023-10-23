@@ -40,11 +40,22 @@
         .package-card:hover {
             transform: translateY(-5px);
         }
+        
+        .image-slider {
+            display: flex;
+            overflow: hidden;
+        }
 
-        .package-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
+        .slider-item {
+            width: 300px; /* Atur lebar sesuai dengan kebutuhan Anda */
+            height: 200px; /* Atur tinggi sesuai dengan kebutuhan Anda */
+            margin-right: 10px; /* Jarak antara gambar */
+        }
+
+        .slider-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Untuk mempertahankan aspek ratio gambar */
         }
 
         .package-details h3 {
@@ -114,11 +125,21 @@
                 @foreach($paketWisata as $paket)
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="package-card">
-                            @if ($paket->foto_wisata)
-                                <img src="{{ asset('uploads/paketWisata/' . $paket->foto_wisata) }}" alt="{{ $paket->nama_paket }}" class="img-fluid">
-                            @else
-                                Tidak Ada Foto
-                            @endif
+                            <div class="image-slider">
+                                @foreach ($paketWisata as $paket)
+                                    @if ($paket->foto_wisata)
+                                        @php
+                                            $images = json_decode($paket->foto_wisata);
+                                            $firstImage = reset($images); // Mengambil gambar pertama dari array
+                                        @endphp
+                                        <div class="slider-item">
+                                            <img src="{{ asset('uploads/paketWisata/' . $firstImage) }}" alt="{{ $paket->nama_paket }}" class="slider-image">
+                                        </div>
+                                    @else
+                                        Tidak Ada Foto
+                                    @endif
+                                @endforeach
+                            </div>
                             <div class="package-details">
                                 <h3>{{ $paket->nama_paket }}</h3>
                                 <p><i class="fas fa-map-marker-alt"></i> {{ $paket->lokasi_wisata }}</p>

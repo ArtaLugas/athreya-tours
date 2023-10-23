@@ -57,6 +57,10 @@ class AdminPesananController extends Controller
     public function KirimInvoice($orderId)
     {
         $order = Pesanan::find($orderId);
+        if ($order) {
+            $order->invoice_sent = true;
+            $order->save();
+        }
 
         if ($order) {
             $user = $order->user;
