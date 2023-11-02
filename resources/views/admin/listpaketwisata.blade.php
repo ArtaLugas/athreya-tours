@@ -4,43 +4,64 @@
 @endsection
 @section('content')
     <style>
-        /* CSS for the image slider */
+        /* Container untuk setiap slider */
         .image-slider {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            overflow: hidden;
-            max-width: 100%;
+            margin: 10px 0;
+        }
+
+        /* Container untuk gambar dan kontrol slider */
+        .slider-wrapper {
+            position: relative;
+            overflow: hidden; /* Menggunakan overflow untuk efek transisi */
         }
 
         .slider-image {
-            max-width: 100%;
+            max-width: 200px;
+            max-height: 200px;
+            width: auto;
             height: auto;
-            margin-right: 10px; /* Adjust the margin as needed */
-            transition: transform 0.3s ease; /* Add a smooth transition effect */
-        }
-        /* CSS for slider-controls */
-        .slider-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px; /* Atur sesuai kebutuhan Anda */
+            object-fit: contain;
+            transition: transform 0.5s, opacity 0.5s, border 0.5s; /* Efek transisi dengan transform, opacity, dan border */
+            opacity: 1; /* Mulai dengan opacity penuh */
+            transform: scale(1); /* Mulai dengan transform normal */
+            border: 2px solid transparent; /* Tambahkan border */
         }
 
+        .slider-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 200px;
+            margin-top: 10px;
+        }
+
+        /* Gaya tombol "Prev" dan "Next" */
         .prev,
         .next {
-            background-color: #333; /* Atur warna latar belakang sesuai kebutuhan Anda */
-            color: #fff; /* Atur warna teks sesuai kebutuhan Anda */
+            background-color: #3498db;
+            color: #fff;
+            border: none;
             padding: 5px 10px;
-            border: 1px solid #333; /* Atur border sesuai kebutuhan Anda */
-            border-radius: 4px; /* Atur border-radius sesuai kebutuhan Anda */
             cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
 
         .prev:hover,
         .next:hover {
-            background-color: #555; /* Warna latar belakang saat tombol dihover */
+            background-color: #2980b9;
         }
+
+        /* Teks "Tidak ada gambar" */
+        span {
+            color: #999;
+        }
+
     </style>
+
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="py-3 mb-4"><span class="text-muted fw-light">Page/</span> List Paket Wisata</h4>
         <div class="row">
@@ -82,17 +103,17 @@
                                         <td>{{ $paket->tanggal_berakhir }}</td>
                                         <td>
                                             @if ($paket->foto_wisata)
-                                                <div class="image-slider">
-                                                    @foreach (json_decode($paket->foto_wisata) as $image)
-                                                        <img src="{{ asset('uploads/paketWisata/' . $image) }}" alt="{{ $paket->nama_paket }}" class="slider-image">
-                                                    @endforeach
-                                                </div>
-                                                <div class="slider-controls">
-                                                    <div class="prev" onclick="plusSlides(-1)">
-                                                        <i class='bx bx-chevron-left' ></i>
-                                                    </div>
-                                                    <div class="next" onclick="plusSlides(1)">
-                                                        <i class='bx bx-chevron-right' ></i>
+                                                <div class="image-slider" data-index="{{ $loop->index }}">
+                                                    <div class="slider-wrapper">
+                                                        @foreach (json_decode($paket->foto_wisata) as $index => $image)
+                                                        <img src="{{ asset('uploads/paketWisata/' . $image) }}"
+                                                            style="max-width: 200px; max-height: 200px; @if ($index !== 0) display: none; @endif"
+                                                            alt="{{ $paket->nama_paket }}" class="slider-image">
+                                                        @endforeach
+                                                        <div class="slider-controls">
+                                                            <button class="prev" data-index="{{ $loop->index }}" onclick="plusSlides(-1, this)">Prev</button>
+                                                            <button class="next" data-index="{{ $loop->index }}" onclick="plusSlides(1, this)">Next</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @else
@@ -119,30 +140,21 @@
         </div>
     </div>
     <script>
-        // JavaScript for the image slider
-        let slideIndex = 0;
-        showSlides(slideIndex);
+        function plusSlides(n, button) {
+            const index = button.getAttribute('data-index');
+            const images = document.querySelectorAll('.image-slider[data-index="' + index + '"] .slider-image');
+            let currentIndex = 0;
 
-        function showSlides(index) {
-            const slides = document.querySelectorAll(".slider-image");
-            if (slides.length === 0) return; // Tidak ada gambar untuk ditampilkan
-
-            if (index < 0) {
-                index = slides.length - 1;
-            }
-            if (index >= slides.length) {
-                index = 0;
+            for (let i = 0; i < images.length; i++) {
+                if (images[i].style.display !== 'none') {
+                    currentIndex = i;
+                    break;
+                }
             }
 
-            slides.forEach((slide) => {
-                slide.style.transform = `translateX(-${index * 100}%)`;
-            });
-            slideIndex = index; // Atur ulang nilai slideIndex
-        }
-
-        function plusSlides(n) {
-            slideIndex += n;
-            showSlides(slideIndex);
+            let newIndex = (currentIndex + n + images.length) % images.length;
+            images[currentIndex].style.display = 'none';
+            images[newIndex].style.display = 'block';
         }
     </script>
 

@@ -125,20 +125,23 @@
                 @foreach($paketWisata as $paket)
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="package-card">
-                            <div class="image-slider">
-                                @foreach ($paketWisata as $paket)
-                                    @if ($paket->foto_wisata)
-                                        @php
-                                            $images = json_decode($paket->foto_wisata);
-                                            $firstImage = reset($images); // Mengambil gambar pertama dari array
-                                        @endphp
-                                        <div class="slider-item">
-                                            <img src="{{ asset('uploads/paketWisata/' . $firstImage) }}" alt="{{ $paket->nama_paket }}" class="slider-image">
+                            <div class="slider-container">
+                                @if ($paket->foto_wisata)
+                                    @php
+                                        $images = json_decode($paket->foto_wisata);
+                                    @endphp
+                                    @if (count($images)>0)
+                                        <div class="image-slider">
+                                            @foreach ($images as $image)
+                                                <div class="slider-item">
+                                                    <img src="{{ asset('uploads/paketWisata/'.$image) }}" alt="{{ $paket->nama_paket }}" class="slider-image">
+                                                </div>
+                                            @endforeach
                                         </div>
-                                    @else
-                                        Tidak Ada Foto
                                     @endif
-                                @endforeach
+                                @else
+                                    Tidak ada foto
+                                @endif
                             </div>
                             <div class="package-details">
                                 <h3>{{ $paket->nama_paket }}</h3>

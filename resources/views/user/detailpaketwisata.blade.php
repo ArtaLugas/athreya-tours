@@ -8,7 +8,6 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     @endpush
     <style>
         /* CSS untuk desain halaman detail paket wisata */
@@ -53,38 +52,54 @@
             color:orange;
         }
 
+        /* Container untuk slider */
         .slider-container {
             max-width: 100%;
             overflow: hidden;
+            position: relative;
         }
 
+        /* Wrapper untuk gambar */
         .slider-wrapper {
             display: flex;
             transition: transform 0.3s ease;
+            max-width: 100%;
+        }
+
+        /* Gambar dalam slider */
+        .slider-item {
+            min-width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
         }
 
         .slider-image {
             max-width: 100%;
             height: auto;
-            object-fit: contain; /* Ini akan menjaga gambar tetap proporsional dan sesuai dengan container */
+            object-fit: cover; /* Ini akan menjaga gambar tetap proporsional dan mengisi container */
         }
 
+        /* Slider controls */
         .slider-controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            bottom: 0;
+            color: #fff;
+            cursor: pointer;
+            padding: 10px;
+            position: absolute;
+            bottom: 0; /* Menempatkan slider control di bagian bawah */
             left: 0;
             right: 0;
-            margin: auto; /* Tengahkan slider controls */
-            background: rgba(0, 0, 0, 0.7); /* Tambahkan latar belakang transparan */
+        }
+
+        .prev{
+            margin-right: 10px;
         }
 
         .prev, .next {
             font-size: 24px;
-            cursor: pointer;
-            color: #fff;
-            margin: 0 10px;
         }
 
         .package-card p {
@@ -224,16 +239,18 @@
                             <div class="slider-container">
                                 <div class="slider-wrapper">
                                     @foreach (json_decode($paketWisata->foto_wisata) as $image)
-                                        <img src="{{ asset('uploads/paketWisata/' . $image) }}" alt="{{ $paketWisata->nama_paket }}" class="slider-image">
+                                        <div class="slider-item">
+                                            <img src="{{ asset('uploads/paketWisata/' . $image) }}" alt="{{ $paketWisata->nama_paket }}" class="slider-image">
+                                        </div>
                                     @endforeach
                                 </div>
-                            </div>
-                            <div class="slider-controls">
-                                <div class="prev" onclick="plusSlides(-1)">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </div>
-                                <div class="next" onclick="plusSlides(1)">
-                                    <i class="fa-solid fa-chevron-right"></i>
+                                <div class="slider-controls">
+                                    <div class="prev" onclick="plusSlides(-1)">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </div>
+                                    <div class="next" onclick="plusSlides(1)">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
                                 </div>
                             </div>
                         @else
@@ -261,7 +278,15 @@
                             <div class="col-md-12">
                                 <div class="package-card-small">
                                     <a href="{{ route('detailpaketwisata', $paketLainnya->id) }}" class="package-card-link">
-                                        <img src="{{ asset('uploads/paketWisata/' . $paketLainnya->foto_wisata) }}" alt="{{ $paketLainnya->nama_paket }}" class="img-fluid">
+                                        @if ($paketLainnya->foto_wisata)
+                                            @php
+                                                $images = json_decode($paketLainnya->foto_wisata);
+                                                $firstImage = reset($images); // Mengambil gambar pertama dari array
+                                            @endphp
+                                            <img src="{{ asset('uploads/paketWisata/' . $firstImage) }}" alt="{{ $paketLainnya->nama_paket }}" class="img-fluid">
+                                        @else
+                                            Tidak ada gambar
+                                        @endif
                                         <div class="package-details">
                                             <h3>{{ $paketLainnya->nama_paket }}</h3>
                                             <p><i class="fas fa-map-marker-alt"></i> {{ $paketLainnya->lokasi_wisata }}</p>

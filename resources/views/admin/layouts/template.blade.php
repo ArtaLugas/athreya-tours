@@ -82,7 +82,7 @@
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <i class="menu-icon tf-icons bx bx-package"></i>
                 <div data-i18n="PaketWisata">Paket Wisata</div>
                 <div class="badge bg-danger rounded-pill ms-auto">2</div>
               </a>
@@ -106,19 +106,19 @@
               </ul>
               <li class="menu-item">
               <a href="{{ route('aboutus') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon tf-icons bx bxs-institution"></i>
                 <div data-i18n="TentangKami">Tentang Kami</div>
               </a>
             </li>
             <li class="menu-item">
               <a href="{{ route('kontakuser') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon tf-icons bx bx-chat"></i>
                 <div data-i18n="PesanUser">Pesan User</div>
               </a>
             </li>
             <li class="menu-item">
               <a href="{{ route('daftarpesananuser') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon tf-icons bx bx-shopping-bag"></i>
                 <div data-i18n="Pesanan">Pesanan</div>
               </a>
             </li>
@@ -127,13 +127,13 @@
             <!-- Cards -->
             <li class="menu-item">
               <a href="{{ 'lihatprofil' }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Basic">Profil</div>
               </a>
             </li>
             <li class="menu-item">
               <a href="{{ Route('logout') }}" class="menu-link" onclick="event.preventDefault();document.getElementById('frmlogout').submit();">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class="menu-icon tf-icons bx bx-exit"></i>
                 <div data-i18n="Basic">Keluar</div>
               </a>
               <form action="{{ route('logout') }}" id="frmlogout" method="POST">
