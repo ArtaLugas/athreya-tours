@@ -13,14 +13,16 @@ class BalasanPesanMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $pesanUser;
     public $pesanBalasan;
 
 
     /**
      * Create a new message instance.
      */
-    public function __construct($pesanBalasan)
+    public function __construct($pesanUser, $pesanBalasan)
     {
+        $this->pesanUser = $pesanUser;
         $this->pesanBalasan = $pesanBalasan;
     }
 

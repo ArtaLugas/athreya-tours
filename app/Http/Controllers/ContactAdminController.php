@@ -48,12 +48,14 @@ class ContactAdminController extends Controller
             'pesan_balasan' => 'required',
         ]);
 
+        $pesanUser = $pesan->message;
         $pesanBalasan = $request->input('pesan_balasan');
 
-        Mail::to($pesan->email)->send(new BalasanPesanMail($pesanBalasan));
+        Mail::to($pesan->email)->send(new BalasanPesanMail($pesanUser, $pesanBalasan));
 
         return redirect()->route('kontakuser')->with('message', 'Pesan Balasan Anda Telah Terkirim');
     }
+
 
     public function DeleteKontak($id)
     {
