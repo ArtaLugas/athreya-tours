@@ -41,6 +41,7 @@ Detail Paket Wisata Athreya Tours
     /* Container untuk slider */
     .slider-container {
         max-width: 100%;
+        max-height: 400px;
         overflow: hidden;
         position: relative;
     }
@@ -61,10 +62,9 @@ Detail Paket Wisata Athreya Tours
     }
 
     .slider-image {
-        max-width: 100%;
-        height: auto;
-        object-fit: cover;
-        /* Ini akan menjaga gambar tetap proporsional dan mengisi container */
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     /* Slider controls */

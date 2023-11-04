@@ -40,12 +40,15 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            background-color: #fff;
         }
 
         th,
         td {
             border: 1px solid #ddd;
             padding: 8px;
+            background-color: #fff;
+            color: #333;
         }
 
         th {
@@ -59,6 +62,46 @@
 
         tfoot {
             font-weight: bold;
+            background-color: #eee;
+        }
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #333;
+                color: #fff;
+            }
+
+            .container {
+                background-color: #222;
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            }
+
+            h1 {
+                color: #fff;
+            }
+
+            hr {
+                border-color: #555;
+            }
+
+            h3 {
+                color: #fff;
+            }
+
+            table {
+                background-color: #222;
+            }
+
+            th,
+            td {
+                background-color: #222;
+                color: #fff;
+            }
+
+            tfoot {
+                background-color: #444;
+            }
         }
     </style>
 </head>
