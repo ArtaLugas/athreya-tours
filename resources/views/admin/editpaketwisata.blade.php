@@ -78,7 +78,7 @@ Edit Paket Wisata | Athreya Tours
         </div>
         @endif
         <div class="card-body">
-          <form action="{{ route('updatepaketwisata', $paket->id) }}" method="POST" enctype="multipart/form-data">
+          <form action="{{ route('updatepaketwisata', $paket->id) }}" id="yourFormId" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label" for="nama_paket">Nama Paket:</label>
@@ -108,6 +108,12 @@ Edit Paket Wisata | Athreya Tours
               <label class="col-sm-2 col-form-label" for="durasi">Durasi (Hari):</label>
               <div class="col-sm-10">
                 <input type="number" class="form-control" id="durasi" name="durasi" value="{{ $paket->durasi }}" required />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="minimum_peserta" class="col-sm-2 col-form-label">Minimum Peserta:</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" name="minimum_peserta" id="minimum_peserta" value="{{ $paket->minimum_peserta }}" required>
               </div>
             </div>
             <div class="row mb-3">

@@ -88,6 +88,7 @@ List Paket Wisata | Athreya Tours
                                 <th class="text-white">Harga (Rp)</th>
                                 <th class="text-white">Lokasi Wisata</th>
                                 <th class="text-white">Durasi (hari)</th>
+                                <th class="text-white">Minimal Peserta</th>
                                 <th class="text-white">Tanggal Mulai</th>
                                 <th class="text-white">Tanggal Berakhir</th>
                                 <th class="text-white">Foto Wisata</th>
@@ -99,10 +100,20 @@ List Paket Wisata | Athreya Tours
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $paket->nama_paket }}</td>
-                                <td>{{ $paket->deskripsi }}</td>
+                                <td>
+                                    @php
+                                    $deskripsi = $paket->deskripsi;
+                                    $deskripsiArray = explode(" ", $deskripsi);
+                                    if (count($deskripsiArray) > 10) {
+                                    $deskripsi = implode(" ", array_slice($deskripsiArray, 0, 10 )) . " ...";
+                                    }
+                                    @endphp
+                                    {{ $deskripsi }}
+                                </td>
                                 <td>Rp {{ number_format($paket->harga, 0, ',', '.') }}</td>
                                 <td>{{ $paket->lokasi_wisata }}</td>
                                 <td>{{ $paket->durasi }}</td>
+                                <td>{{ $paket->minimum_peserta}} Orang</td>
                                 <td>{{ $paket->tanggal_mulai }}</td>
                                 <td>{{ $paket->tanggal_berakhir }}</td>
                                 <td>

@@ -66,13 +66,11 @@ Pesanan | Athreya Tours
                 <td>{{ $pesan->status_pesanan }}</td>
                 <td class="button-container">
                   @if (!$pesan->invoice_sent)
-                  @foreach($pesanan as $pesan)
                   <a class="btn btn-primary btn-kirim-invoice" id="btn-kirim-invoice-{{ $pesan->id }}" href="{{ route('kiriminvoice', ['orderId' => $pesan->id]) }}" data-order-id="{{ $pesan->id }}">
                     Kirim Invoice
                   </a>
                   <a class="btn btn-success disabled" id="btn-terima-{{ $pesan->id }}" disabled>Terima</a>
                   <a class="btn btn-warning disabled" id="btn-tolak-{{ $pesan->id }}" disabled>Tolak</a>
-                  @endforeach
                   @else
                   <a class="btn btn-primary disabled" id="btn-kirim-invoice-{{ $pesan->id }}" disabled>Kirim Invoice</a>
                   <a href="{{ route('terimapesanan', $pesan->id) }}" class="btn btn-success" onclick="event.preventDefault();document.getElementById('frmterima').submit();">Terima</a>
@@ -99,27 +97,28 @@ Pesanan | Athreya Tours
   </div>
 </div>
 <script>
+  // Temukan semua tombol Kirim Invoice
   const kirimInvoiceButtons = document.querySelectorAll('.btn-kirim-invoice');
 
+  // Loop melalui setiap tombol Kirim Invoice
   kirimInvoiceButtons.forEach(button => {
+    // Tambahkan event listener saat tombol Kirim Invoice diklik
     button.addEventListener('click', function() {
-      const orderId = this.getAttribute('data-order-id');
-      fetch("{{ route('kiriminvoice', 'orderId') }}", {
-        method: 'GET',
-        headers: {
-          'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({
-          orderId: orderId
-        })
-      }).then(function(response) {
-        if (response.ok) {
-          this.classList.add('disabled');
-          document.getElementById('btn-terima-' + orderId).classList.remove('disabled');
-          document.getElementById('btn-tolak-' + orderId).classList.remove('disabled');
-        }
-      });
+      // Menonaktifkan tombol Kirim Invoice yang diklik
+      button.disabled = true;
+
+      // Dapatkan ID pesan dari atribut data-order-id
+      const orderId = button.getAttribute('data-order-id');
+
+      // Temukan tombol Terima dan Tombol Tolak berdasarkan ID pesan
+      const terimaButton = document.getElementById(`btn-terima-${orderId}`);
+      const tolakButton = document.getElementById(`btn-tolak-${orderId}`);
+
+      // Aktifkan tombol Terima dan Tombol Tolak
+      terimaButton.disabled = false;
+      tolakButton.disabled = false;
     });
   });
 </script>
+
 @endsection

@@ -10,7 +10,7 @@ class PaketWisata extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_paket', 'deskripsi', 'harga', 'lokasi_wisata', 'durasi', 'foto_wisata', 'tanggal_mulai', 'tanggal_berakhir'
+        'nama_paket', 'deskripsi', 'harga', 'lokasi_wisata', 'durasi', 'foto_wisata', 'tanggal_mulai', 'tanggal_berakhir', 'minimum_peserta'
     ];
 
     protected $casts = [

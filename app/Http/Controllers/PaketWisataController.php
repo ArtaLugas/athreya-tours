@@ -31,6 +31,7 @@ class PaketWisataController extends Controller
             'lokasi_wisata' => 'required',
             'durasi' => 'required|integer',
             'tanggal_mulai' => 'required|date',
+            'minimum_peserta' => 'required|integer|min:3',
         ]);
 
         $fotoWisataPaths = [];
@@ -74,6 +75,7 @@ class PaketWisataController extends Controller
             'lokasi_wisata' => 'required',
             'durasi' => 'required|integer',
             'tanggal_mulai' => 'required|date',
+            'minimum_peserta' => 'required|integer|min:3',
         ]);
 
         $fotoWisataPaths = [];
@@ -102,6 +104,7 @@ class PaketWisataController extends Controller
             'tanggal_mulai' => $validatedData['tanggal_mulai'],
             'tanggal_berakhir' => $tanggalBerakhir,
             'foto_wisata' => json_encode($fotoWisataPaths),
+            'minimum_peserta' => $validatedData['minimum_peserta'],
         ]);
 
         return redirect()->route('listpaketwisata')->with('message', 'Paket Wisata Berhasil Diupdate');

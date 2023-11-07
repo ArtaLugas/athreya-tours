@@ -293,6 +293,8 @@ Detail Paket Wisata Athreya Tours
                         <p>Rp {{ number_format($paketWisata->harga, 0, ',', '.') }}</p>
                         <h4>Waktu:</h4>
                         <p>{{ $paketWisata->durasi }} Hari</p>
+                        <h4>Minimum Peserta:</h4>
+                        <p>{{ $paketWisata->minimum_peserta }} Orang</p>
                         <h4>Tanggal:</h4>
                         <p>{{ $paketWisata->tanggal_mulai }} sampai {{ $paketWisata->tanggal_berakhir }}</p>
                         <button type="button" class="btn btn-custom" data-toggle="modal" data-target="#pesanModal">Pesan</button>
