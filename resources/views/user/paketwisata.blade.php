@@ -124,6 +124,9 @@ Paket Wisata Athreya Tours
                     <option value="name-desc">Nama (Z-A)</option>
                     <option value="price-asc">Harga (Terendah ke Tertinggi)</option>
                     <option value="price-desc">Harga (Tertinggi ke Terendah)</option>
+                    <option value="popularity-asc">Popularitas (Terendah ke Tertinggi)</option>
+                    <option value="popularity-desc">Popularitas (Tertinggi ke Terendah)</option>
+
                     <!-- Tambahkan pilihan sort lainnya -->
                 </select>
             </div>
