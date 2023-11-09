@@ -59,6 +59,7 @@ require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admindashboard');
+    Route::get('/downloadpdf', [AdminController::class, 'downloadPDF'])->name('downloadPDF');
 
     Route::controller(PaketWisataController::class)->group(function () {
         Route::get('/admin/tambah-paket-wisata', 'TambahPaketWisata')->name('tambahpaketwisata');

@@ -77,7 +77,6 @@ List Paket Wisata | Athreya Tours
                     {{ session('message') }}
                 </div>
                 @endif
-
                 <div class="table-responsive text-nowrap">
                     <table class="table table-bordered table-hover">
                         <thead class="table-dark text-center">
